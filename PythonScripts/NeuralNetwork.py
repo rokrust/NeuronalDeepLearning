@@ -148,9 +148,10 @@ class NeuralNetwork:
 
     def j(self, x, y):
         # Network Cost Function
+        y_hat = self.eval(x)
+        return self.j_entropy(y, y_hat)
         
-        return 0
-
+        
     def grad_j(self, x, y):
         # Gradient w.r.t. to all parameters
         #
