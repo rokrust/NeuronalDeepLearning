@@ -5,7 +5,7 @@ import reluNeuron
 
 from cost_functions import *
 from gradientDescent import *
-from numpy import random
+import numpy as np
 
 class NeuralNetwork:
     def __init__(self, w_i, w_h, n_h, w_o,
@@ -36,9 +36,9 @@ class NeuralNetwork:
         # -) Uniform distribution   i.e. ~ U(-sqrt(6/(n+m)), +sqrt(6/(n+m)))
         # -) Normal distribution 1  i.e. ~ sqrt(2/n) N(0, 1)
         # -) Normal distribution 2  i.e. ~ sqrt(2/(n+m)) N(0, 1)
-        self.w_uniform  = uniform(-sqrt(6/(n+m)), sqrt(6/(n+m)))# Fill in Lambda Function
-        self.w_normal_1 = sqrt(2/w_h)*normal(0, 1)# Fill in Lambda Function
-        self.w_normal_2 = sqrt(2/(n+m))*normal(0, 1)# Fill in Lambda Function
+        self.w_uniform  = lambda m, n: np.random.uniform(-sqrt(6.0/(n+m)), sqrt(6.0/(n+m)))# Fill in Lambda Function
+        self.w_normal_1 = lambda m, n: math.sqrt(2.0/n)*np.random.normal(0, 1)# Fill in Lambda Function
+        self.w_normal_2 = lambda m, n: math.sqrt(2.0/(n+m))*np.random.normal(0, 1)# Fill in Lambda Function
         self.weight_pdf = self.w_normal_1
 
         # The biases can be initialized to 0 or to a small positive number (0.001) to make the ReLu Units active for
@@ -56,10 +56,10 @@ class NeuralNetwork:
         # Initialize the cost function:
         # Parametrization of the cost function and an additive regularization term. Currently, the MSE cost function
         # and l1-, l2-norm can be used for regularization.
-        self.j_entropy      = # Entropy cost function
-        self.grad_j_entropy = # Gradient of the Mean Squared Error
-        self.j_reg          = # Additive regularization cost function
-        self.grad_j_reg     = # Gradient of the additive regularization cost function
+        self.j_entropy      = j_mse# Entropy cost function
+        self.grad_j_entropy = grad_j_mse# Gradient of the Mean Squared Error
+        self.j_reg          = l2_norm# Additive regularization cost function
+        self.grad_j_reg     = grad_l2_norm# Gradient of the additive regularization cost function
 
         # Training of the Neural Network:
         # The neural network is trained via stochastic gradient descent with varying batch sizes and early stopping to
@@ -108,52 +108,47 @@ class NeuralNetwork:
         self._fig_j = None
 
         # Initialize the weight matrix:
-        #
-        #
-        # Fill in
-        #
-        #
-        #
-        #
-        #
+        self.weight_initialization()
 
 
     def eval(self, x):
-        pass
         # Evaluate the network output
-        #
-        #
-        # Fill in
-        #
-        #
-        #
-        #
-        #
+        self.out = [ [0 for i in range(self.hidden_width)] for j in range(self.n_layer) ]
+        
+        #first layer
+        for i in range(self.hidden_width):
+            for j in range(self.input_width):
+                out[0][i] += x[j] * self.w[0][i][j]
+            
+            out[0][i] = self.g_h(node_sum[i])
+            
+        #hidden layers
+        for i in range(1, self.n_layer):
+            for j in range(self.hidden_width):
+                for k in range(self.hidden_width):
+                    out[i][j] += out[i-1][k] * self.w[i][j][k]
 
+                out[i][j] = self.g_h(node_sum[i])
+                
+        return out[self.n_layer - 1][0:self.output_width]
+    
 
     def weight_initialization(self):
         # Initialize all parameters
-        #
-        #
-        # Fill in
-        #
-        #
-        #
-        #
-        #
-        return 0
+        #first layer
+        self.w = [ [self.weight_pdf(self.input_width, self.hidden_width) for x in range(self.input_width)] for y in range(self.hidden_depth) ]
+        
+        #Hidden layers
+        for i in range(self.hidden_depth-1):
+            self.w.append([ [self.weight_pdf(self.hidden_width, self.hidden_width) for x in range(self.input_width)] for y in range(self.hidden_depth) ])
+            
+        #Output layer
+        self.w.append([ [self.weight_pdf(self.hidden_width, self.output_width) for x in range(self.input_width)] for y in range(self.hidden_depth) ])
 
 
     def j(self, x, y):
         # Network Cost Function
-        #
-        #
-        # Fill in
-        #
-        #
-        #
-        #
-        #
+        
         return 0
 
     def grad_j(self, x, y):
