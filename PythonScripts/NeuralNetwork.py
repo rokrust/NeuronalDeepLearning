@@ -5,7 +5,7 @@ import reluNeuron
 
 from cost_functions import *
 from gradientDescent import *
-
+from numpy import random
 
 class NeuralNetwork:
     def __init__(self, w_i, w_h, n_h, w_o,
@@ -24,10 +24,10 @@ class NeuralNetwork:
         # -) Tanh Neuron
         # -) ReLu Neuron
         # -) Linear Neuron
-        self.g_h        = # Hidden unit neuron type
-        self.g_o        = # Output unit neuron type
-        self.grad_g_h   = # Gradient of hidden neurons
-        self.grad_g_o   = # Gradient of output neurons
+        self.g_h        = hidden_neuron_type.g# Hidden unit neuron type
+        self.g_o        = output_neuron_type.g# Output unit neuron type
+        self.grad_g_h   = hidden_neuron_type.grad_g# Gradient of hidden neurons
+        self.grad_g_o   = output_neuron_type.grad_g# Gradient of output neurons
 
         # Weight Initialization:
         # The weights should be initialize to a small non-zero value and the initial weights need to be asymmetric.
@@ -36,14 +36,14 @@ class NeuralNetwork:
         # -) Uniform distribution   i.e. ~ U(-sqrt(6/(n+m)), +sqrt(6/(n+m)))
         # -) Normal distribution 1  i.e. ~ sqrt(2/n) N(0, 1)
         # -) Normal distribution 2  i.e. ~ sqrt(2/(n+m)) N(0, 1)
-        self.w_uniform  = # Fill in Lambda Function
-        self.w_normal_1 = # Fill in Lambda Function
-        self.w_normal_2 = # Fill in Lambda Function
+        self.w_uniform  = uniform(-sqrt(6/(n+m)), sqrt(6/(n+m)))# Fill in Lambda Function
+        self.w_normal_1 = sqrt(2/w_h)*normal(0, 1)# Fill in Lambda Function
+        self.w_normal_2 = sqrt(2/(n+m))*normal(0, 1)# Fill in Lambda Function
         self.weight_pdf = self.w_normal_1
 
         # The biases can be initialized to 0 or to a small positive number (0.001) to make the ReLu Units active for
         # the input distribution
-        self.b_0        = # Fill in Value
+        self.b_0        = 0.001# Fill in Value
 
         # Regularization
         # -) no normalization        i.e. J_reg(w) = 0
